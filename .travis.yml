@@ -1,6 +1,7 @@
 sudo: required
 addons:
   ssh_known_hosts: 52.221.244.175
+language: php
 services:
 - docker
 before_script:
@@ -11,6 +12,8 @@ before_script:
 - ssh-add ecs.pem
 before_install:
 - docker build -t gdury/nginx-custom:$TRAVIS_BUILD_NUMBER .
+install:
+  - echo "install nothing!"
 after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   docker push gdury/nginx-custom:$TRAVIS_BUILD_NUMBER; fi
