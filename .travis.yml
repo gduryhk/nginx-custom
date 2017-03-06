@@ -1,5 +1,4 @@
 sudo: required
-language: go
 addons:
   ssh_known_hosts: 52.221.244.175
 services:
