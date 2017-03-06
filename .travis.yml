@@ -1,0 +1,18 @@
+sudo: required
+language: go
+addons:
+  ssh_known_hosts: 52.221.244.175
+services:
+- docker
+before_script:
+- openssl aes-256-cbc -pass "pass:$TRAVIS_CI_SECRET" -in ./.secret -out ./ecs.pem -d -a
+- eval "$(ssh-agent -s)"
+- chmod 400 ecs.pem
+- ssh-add ecs.pem
+before_install:
+- docker build -t gdury/nginx-custom:$TRAVIS_BUILD_NUMBER .
+after_success:
+- if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  docker push gdury/nginx-custom:$TRAVIS_BUILD_NUMBER; fi
+- ssh docker@52.221.244.175 'docker info';
+- ssh docker@52.221.244.175 "docker service update --image nginx-custom:$TRAVIS_BUILD_NUMBER nginx";
