@@ -14,6 +14,8 @@ before_install:
 - docker build -t gdury/nginx-custom:$TRAVIS_BUILD_NUMBER .
 install:
   - echo "install nothing!"
+script:
+  - echo "no tests!" # put your normal testing scripts here
 after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   docker push gdury/nginx-custom:$TRAVIS_BUILD_NUMBER; fi
