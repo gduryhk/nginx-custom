@@ -20,7 +20,7 @@ after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   docker push gdury/nginx-custom:$TRAVIS_BUILD_NUMBER; fi
 - ssh docker@52.221.244.175 'docker info';
-- ssh docker@52.221.244.175 "docker service update --image nginx-custom:$TRAVIS_BUILD_NUMBER
+- ssh docker@52.221.244.175 "docker service update --image gdury/nginx-custom:$TRAVIS_BUILD_NUMBER
   nginx";
 env:
   global:
