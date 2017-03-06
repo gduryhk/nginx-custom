@@ -5,7 +5,8 @@ addons:
 services:
 - docker
 before_script:
-- openssl aes-256-cbc -pass "pass:$TRAVIS_CI_SECRET" -in ./.secret -out ./ecs.pem -d -a
+- openssl aes-256-cbc -pass "pass:$TRAVIS_CI_SECRET" -in ./.secret -out ./ecs.pem
+  -d -a
 - eval "$(ssh-agent -s)"
 - chmod 400 ecs.pem
 - ssh-add ecs.pem
@@ -15,4 +16,8 @@ after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   docker push gdury/nginx-custom:$TRAVIS_BUILD_NUMBER; fi
 - ssh docker@52.221.244.175 'docker info';
-- ssh docker@52.221.244.175 "docker service update --image nginx-custom:$TRAVIS_BUILD_NUMBER nginx";
+- ssh docker@52.221.244.175 "docker service update --image nginx-custom:$TRAVIS_BUILD_NUMBER
+  nginx";
+env:
+  global:
+    secure: VV3IL5jWAsTHN0Ofxa3OtfrAB0Eggt2yVna0hB2dEtOniK9nXsFLvn0T0bOKkJge+M5wuZm3FvUv1VWt4s4jmQtuSI5EPiiuD5ayhoqwhbOOxRBcL6s7LdD6mrZIdl1puaP13pyxjU5L3dws/RCwuO+iH9lX5BRWIedR2P54ScogDOu9jt4EpoJ8GpAYuBDnA2Wi51AEQjXyhOYqYOve7EE5DP4O/zEi0ZIHUKZfildlU2yJm1TUzGUNzy4SFwtE+kCXBJZVBjIyyciquPmO6kK9VmrarhsTHplEmmgtlTfIOc2YQ+iQvIvH4QjWjzgtV9soCBtHgDZ/8E1ocEzkWrZ7v+99+NkWIA+cYzNXUnPaNhFJ7NSlqNbQDv7XZAyYJO6NzfuWrU9eH2inO1ilG7xFedAMTOJHvrwnW0M+Nsh2+Fyxx94yguZEPatCidKwf7ctfnVyANeakr54AX8tlgY/g/vJAI0I37alZcYf6Ls5NtpHVV9FNP8Ub4zHIxURROIQLYi91m/jinVcFPwVLvScNeNxdjfcjr4JJYZ46+o5WnAHeMBaPcts4zQLGhI7OBXJoXt0JjKuMnKhOGGuX4e1HkSt2SwRSetoiY7w08D/ELIpQ9e7SA1odtcS/+3Lbe1VRbAGioLnIjp+YJFiDbi9tnjsiJsxcka4N6oj2VE=
